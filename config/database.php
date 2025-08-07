@@ -1,28 +1,34 @@
 @@ .. @@
  <?php
  // Database configuration
- $host = getenv('DB_HOST') ?: 'localhost';
 -$dbname = getenv('DB_NAME') ?: 'echostore';  // Fixed database name
-+$dbname = getenv('DB_NAME') ?: 'echostore';
  $username = getenv('DB_USER') ?: 'postgres';
--$password = getenv('DB_PASSWORD') ?: '1234';  // Updated with your password
+$host = 'localhost';
+$dbname = 'echostore';
+$username = 'postgres';
+$password = '1234';  // Update this with your actual PostgreSQL password
+$port = '5432';
 +$password = getenv('DB_PASSWORD') ?: 'your_password_here';  // UPDATE THIS WITH YOUR ACTUAL PASSWORD
  $port = getenv('DB_PORT') ?: '5432';
  
  try {
-@@ .. @@
-     // Test the connection
-     $pdo->query("SELECT 1");
+        PDO::ATTR_PERSISTENT => false,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
  } catch(PDOException $e) {
-     // Log error and show user-friendly message
      error_log("Database connection failed: " . $e->getMessage());
-     
 -    // For development, show detailed error
 -    if (getenv('APP_ENV') === 'development') {
 -        die("Database connection failed: " . $e->getMessage());
 -    } else {
 -        die("Database connection failed. Please try again later.");
 -    }
+    die("Database connection failed: " . $e->getMessage() . 
+        "\n\nPlease ensure:\n" .
+        "1. PostgreSQL is running\n" .
+        "2. Database 'echostore' exists\n" .
+        "3. Username and password are correct\n" .
+        "4. Host and port are accessible");
 +    // Show detailed error for troubleshooting
 +    die("
 +    <h1>Database Connection Failed</h1>
